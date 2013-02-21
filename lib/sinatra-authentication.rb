@@ -62,6 +62,13 @@ module Sinatra
             flash[:notice] = "Login successful."
           end
 
+          ################################################################
+          # add an ajax response.  Note, we must use a proper return code.
+          if request.xhr?
+            out = {:logged_in => true, :user => params[:email]}
+            halt 200, out.to_json
+          end
+
           if session[:return_to]
             redirect_url = session[:return_to]
             session[:return_to] = false
@@ -73,6 +80,15 @@ module Sinatra
           if Rack.const_defined?('Flash')
             flash[:error] = "The email or password you entered is incorrect."
           end
+
+          ###############################################################
+          #ajax response
+          #NB: a 403 return flags as an error
+          if request.xhr?
+            out = {:logged_in => false, :user => ""}
+            halt 403, out.to_json
+          end
+
           redirect '/login'
         end
       end
@@ -83,6 +99,15 @@ module Sinatra
           flash[:notice] = "Logout successful."
         end
         return_to = ( session[:return_to] ? session[:return_to] : '/' )
+
+        ###############################################################
+        # ajax love
+        if request.xhr?
+          out = {:logged_in => false, :user => ""}
+          halt 200, out.to_json
+        end
+
+
         redirect return_to
       end
 

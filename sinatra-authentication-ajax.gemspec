@@ -4,14 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{sinatra-authentication}
+  s.name = %q{sinatra-authentication-ajax}
   s.version = "0.4.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Max Justus Spransy"]
-  s.date = %q{2010-12-14}
-  s.description = %q{Simple authentication plugin for sinatra.}
-  s.email = %q{maxjustus@gmail.com}
+  s.authors = ["Max Justus Spransy","Scott Wakely"]
+  s.date = %q{2013-02-20}
+  s.description = %q{Simple authentication plugin for sinatra, modified for ajax by wakely}
+  s.email = %q{wakely@uchicago.edu}
   s.extra_rdoc_files = [
     "TODO"
   ]
@@ -48,7 +48,8 @@ Gem::Specification.new do |s|
     "lib/views/login.haml",
     "lib/views/show.haml",
     "lib/views/signup.haml",
-    "readme.markdown",
+    "readme.md",
+    "readme-orig.markdown",
     "sinatra-authentication-0.3.2.gem",
     "sinatra-authentication.gemspec",
     "spec/run_all_specs.rb",
@@ -79,10 +80,10 @@ Gem::Specification.new do |s|
     "test/rufus_tokyo_test.rb",
     "test/sequel_test.rb"
   ]
-  s.homepage = %q{http://github.com/maxjustus/sinatra-authentication}
+  s.homepage = %q{http://github.com/wakely/sinatra-authentication-ajax}
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
-  s.summary = %q{Simple authentication plugin for sinatra.}
+  s.summary = %q{Simple authentication plugin for sinatra, modified for ajax by wakely}
   s.test_files = [
     "spec/run_all_specs.rb",
     "spec/unit/dm_model_spec.rb",
