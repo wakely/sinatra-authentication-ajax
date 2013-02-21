@@ -4,6 +4,7 @@ To install:
 ```
 git clone git@github.com:/wakely/sinatra-authentication-ajax
 cd ./sinatra-authentication-ajax
-gem build ./sinatra-authentication-ajax
+as root:
+gem build ./sinatra-authentication-ajax.gemspec
 gem install ./sinatra-authentication-ajax-0.4.2.gem
 ```
