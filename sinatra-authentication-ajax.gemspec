@@ -51,7 +51,7 @@ Gem::Specification.new do |s|
     "readme.md",
     "readme-orig.markdown",
     "sinatra-authentication-0.3.2.gem",
-    "sinatra-authentication.gemspec",
+    "sinatra-authentication-ajax.gemspec",
     "spec/run_all_specs.rb",
     "spec/unit/dm_model_spec.rb",
     "spec/unit/mm_model_spec.rb",
