@@ -15,7 +15,8 @@ lib/views/index.haml
 lib/views/login.haml
 lib/views/show.haml
 lib/views/signup.haml
-readme.markdown
+readme-orig.markdown
+readme.md
 test/datamapper_test.rb
 test/lib/dm_app.rb
 test/lib/helper.rb
