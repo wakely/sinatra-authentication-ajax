@@ -50,7 +50,7 @@ Gem::Specification.new do |s|
     "lib/views/signup.haml",
     "readme.md",
     "readme-orig.markdown",
-    "sinatra-authentication-0.3.2.gem",
+    "sinatra-authentication-ajax.0.4.2.gem",
     "sinatra-authentication-ajax.gemspec",
     "spec/run_all_specs.rb",
     "spec/unit/dm_model_spec.rb",
