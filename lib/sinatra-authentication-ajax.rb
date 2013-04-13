@@ -39,10 +39,11 @@ module Sinatra
 
       #convenience for ajax
       app.get '/auth/logged_in' do
-        out = {:logged_in => false, :user => '', :is_admin => false}
+        out = {:logged_in => false, :user => '', :session => '', :is_admin => false}
         if logged_in?
           out[:logged_in] = true
-          out[:user]      = session[:user]
+          out[:session]   = session[:user]
+          out[:user]      = current_user.email
           if current_user.admin?
             out[:is_admin]  = true
           end

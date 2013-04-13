@@ -14,7 +14,7 @@
         <fb:name uid=#{@user.fb_uid} linked='false' />
       - else
         account
-  %form{:action => "/users/#{@user.id}/edit", :method => "post"}
+  %form{:action => "/auth/users/#{@user.id}/edit", :method => "post"}
     .field
       .label
         %label{:for => "user_email"} Email

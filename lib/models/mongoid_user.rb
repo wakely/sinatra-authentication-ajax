@@ -1,13 +1,14 @@
 class MongoidUser 
   include Mongoid::Document
   include Mongoid::Timestamps
-  field :email
+
+  field :email  #serves as the username
+
   field :hashed_password
   field :salt
 
   field :userID,  :type => Integer, :default => -1
   field :groupID, :type => Integer, :default => -1
-  field :username, :type => String, :default => "ninja"
 
   field :permission_level, :type => Integer, :default => 1
   if Sinatra.const_defined?('FacebookObject')

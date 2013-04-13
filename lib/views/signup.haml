@@ -4,7 +4,7 @@
   - if Rack.const_defined?('Flash') && flash[:error]
     #sinatra_authentication_flash= flash[:error]
   %h1.page_title Sign Up
-  %form{:action => "/signup", :method => "post"}
+  %form{:action => "/auth/signup", :method => "post"}
     .field
       .label
         %label{:for => "user_email"} Email
@@ -19,7 +19,7 @@
       %input{ :id => "user_password_confirmation", :name => "user[password_confirmation]", :size => 30, :type => "password" }
     .buttons
       %input{ :value => "Sign up", :type => "submit" }
-      %a{:href => "/login", :class => 'sinatra_authentication_link'}
+      %a{:href => "/auth/login", :class => 'sinatra_authentication_link'}
         Login
     - if Sinatra.const_defined?('FacebookObject')
       .third_party_signup
