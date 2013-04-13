@@ -39,15 +39,7 @@ module Sinatra
 
       #convenience for ajax
       app.get '/auth/logged_in' do
-        out = {:logged_in => false, :user => '', :session => '', :is_admin => false}
-        if logged_in?
-          out[:logged_in] = true
-          out[:session]   = session[:user]
-          out[:user]      = current_user.email
-          if current_user.admin?
-            out[:is_admin]  = true
-          end
-        end
+        out = get_authentication_state
         halt 200, out.to_json
       end
 
@@ -74,7 +66,8 @@ module Sinatra
           ##################################################################
           # add an ajax response.  Note, we must use a proper return code.
           if request.xhr?
-            out = {:logged_in => true, :user => params[:email]}
+            ##out = {:logged_in => true, :email => params[:email]}
+            out = get_authentication_state
             halt 200, out.to_json
           end
 
@@ -94,7 +87,8 @@ module Sinatra
           #ajax response
           #NB: a 403 return flags as an error
           if request.xhr?
-            out = {:logged_in => false, :user => ""}
+            ##out = {:logged_in => false, :email => ""}
+            out = get_authentication_state
             halt 403, out.to_json
           end
 
@@ -112,7 +106,8 @@ module Sinatra
         ###############################################################
         # ajax love
         if request.xhr?
-          out = {:logged_in => false, :user => ""}
+          ##out = {:logged_in => false, :user => ""}
+          out = get_authentication_state
           halt 200, out.to_json
         end
 
@@ -230,6 +225,22 @@ module Sinatra
   module Helpers
     def hash_to_query_string(hash)
       hash.collect {|k,v| "#{k}=#{v}"}.join('&')
+    end
+
+    # Build up a useful authentication object suitable for sending back on ajax calls
+    def get_authentication_state
+      out = {:logged_in => false, :email => '', :session => '', :is_admin => false, :userID => -1, :groupID => -1}
+      if logged_in?
+        out[:logged_in] = true
+        out[:session]   = session[:user]
+        out[:email]     = current_user.email
+        out[:userID]    = current_user.userID
+        out[:groupID]   = current_user.groupID
+        if current_user.admin?
+          out[:is_admin]  = true
+        end
+      end
+      return out
     end
 
     def login_required
