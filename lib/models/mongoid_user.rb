@@ -4,6 +4,11 @@ class MongoidUser
   field :email
   field :hashed_password
   field :salt
+
+  field :userID,  :type => Integer, :default => -1
+  field :groupID, :type => Integer, :default => -1
+  field :username, :type => String, :default => "ninja"
+
   field :permission_level, :type => Integer, :default => 1
   if Sinatra.const_defined?('FacebookObject')
     field :fb_uid

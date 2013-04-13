@@ -15,7 +15,7 @@ module Sinatra
         app.set :template_engine, :haml
       end
 
-      app.get '/users/?' do
+      app.get '/auth/users/?' do
         login_required
         redirect "/" unless current_user.admin?
 
@@ -23,11 +23,11 @@ module Sinatra
         if @users != []
           send settings.template_engine, get_view_as_string("index.#{settings.template_engine}"), :layout => use_layout?
         else
-          redirect '/signup'
+          redirect '/auth/signup'
         end
       end
 
-      app.get '/users/:id/?' do
+      app.get '/auth/users/:id/?' do
         login_required
 
         if params[:id].to_i != current_user.id and !current_user.admin?
@@ -37,16 +37,22 @@ module Sinatra
         send settings.template_engine,  get_view_as_string("show.#{settings.template_engine}"), :layout => use_layout?
       end
 
-      #convenience for ajax but maybe entirely stupid and unnecesary
-      app.get '/logged_in' do
-        if session[:user]
-          "true"
-        else
-          "false"
+      #convenience for ajax
+      app.get '/auth/logged_in' do
+        out = {:logged_in => false, :user => '', :is_admin => false}
+        if logged_in?
+          out[:logged_in] = true
+          out[:user]      = session[:user]
+          if current_user.admin?
+            out[:is_admin]  = true
+          end
         end
+        halt 200, out.to_json
       end
 
-      app.get '/login/?' do
+      #######################################################################
+      # Are we logged in?
+      app.get '/auth/login/?' do
         if session[:user]
           redirect '/'
         else
@@ -54,7 +60,9 @@ module Sinatra
         end
       end
 
-      app.post '/login/?' do
+      #######################################################################
+      #
+      app.post '/auth/login/?' do
         if user = User.authenticate(params[:email], params[:password])
           session[:user] = user.id
 
@@ -62,7 +70,7 @@ module Sinatra
             flash[:notice] = "Login successful."
           end
 
-          ################################################################
+          ##################################################################
           # add an ajax response.  Note, we must use a proper return code.
           if request.xhr?
             out = {:logged_in => true, :user => params[:email]}
@@ -93,7 +101,7 @@ module Sinatra
         end
       end
 
-      app.get '/logout/?' do
+      app.get '/auth/logout/?' do
         session[:user] = nil
         if Rack.const_defined?('Flash')
           flash[:notice] = "Logout successful."
@@ -107,11 +115,12 @@ module Sinatra
           halt 200, out.to_json
         end
 
-
         redirect return_to
       end
 
-      app.get '/signup/?' do
+      ####################################################################
+      # Serve the signup form
+      app.get '/auth/signup/?' do
         if session[:user]
           redirect '/'
         else
@@ -119,7 +128,7 @@ module Sinatra
         end
       end
 
-      app.post '/signup/?' do
+      app.post '/auth/signup/?' do
         @user = User.set(params[:user])
         if @user.valid && @user.id
           session[:user] = @user.id
@@ -131,20 +140,20 @@ module Sinatra
           if Rack.const_defined?('Flash')
             flash[:error] = "There were some problems creating your account: #{@user.errors}."
           end
-          redirect '/signup?' + hash_to_query_string(params['user'])
+          redirect '/auth/signup?' + hash_to_query_string(params['user'])
         end
       end
 
-      app.get '/users/:id/edit/?' do
+      app.get '/auth/users/:id/edit/?' do
         login_required
-        redirect "/users" unless current_user.admin? || current_user.id.to_s == params[:id]
+        redirect "/auth/users" unless current_user.admin? || current_user.id.to_s == params[:id]
         @user = User.get(:id => params[:id])
         send settings.template_engine, get_view_as_string("edit.#{settings.template_engine}"), :layout => use_layout?
       end
 
-      app.post '/users/:id/edit/?' do
+      app.post '/auth/users/:id/edit/?' do
         login_required
-        redirect "/users" unless current_user.admin? || current_user.id.to_s == params[:id]
+        redirect "/auth/users" unless current_user.admin? || current_user.id.to_s == params[:id]
 
         user = User.get(:id => params[:id])
         user_attributes = params[:user]
@@ -162,13 +171,13 @@ module Sinatra
           if Rack.const_defined?('Flash')
             flash[:error] = "Whoops, looks like there were some problems with your updates: #{user.errors}."
           end
-          redirect "/users/#{user.id}/edit?" + hash_to_query_string(user_attributes)
+          redirect "/auth/users/#{user.id}/edit?" + hash_to_query_string(user_attributes)
         end
       end
 
-      app.get '/users/:id/delete/?' do
+      app.get '/auth/users/:id/delete/?' do
         login_required
-        redirect "/users" unless current_user.admin? || current_user.id.to_s == params[:id]
+        redirect "/auth/users" unless current_user.admin? || current_user.id.to_s == params[:id]
 
         if User.delete(params[:id])
           if Rack.const_defined?('Flash')
