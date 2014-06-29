@@ -7,7 +7,7 @@ begin
   
   Jeweler::Tasks.new do |gemspec|
     gemspec.name           = 'sinatra-authentication-ajax'
-    gemspec.version        = '0.4.2'
+    gemspec.version        = '0.4.6'
     gemspec.description    = "Simple authentication plugin for sinatra, with ajax"
     gemspec.summary        = "Simple authentication plugin for sinatra, with ajax"
     gemspec.homepage       = "http://github.com/wakely/sinatra-authentication-ajax"
