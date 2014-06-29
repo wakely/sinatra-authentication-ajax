@@ -230,7 +230,7 @@ module Sinatra
     # Build up a useful authentication object suitable for sending back on ajax calls
     def get_authentication_state
       out = {:logged_in => false, :email => '', :session => '', :is_admin => false, :userID => -1, :groupID => -1}
-      if logged_in?
+      if logged_in? && current_user != nil
         out[:logged_in] = true
         out[:session]   = session[:user]
         out[:email]     = current_user.email
